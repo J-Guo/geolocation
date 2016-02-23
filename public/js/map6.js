@@ -24,11 +24,11 @@ var app = new Vue({
         locateAddress: function(){
 
             // Show full page Loading Overlay
-            $.LoadingOverlay("show");
+            $("#User-Map").LoadingOverlay("show");
 
             // Hide it after 3 seconds
             setTimeout(function(){
-                $.LoadingOverlay("hide");
+                $("#User-Map").LoadingOverlay("hide");
             }, 1500);
 
             var geocoder = new google.maps.Geocoder();

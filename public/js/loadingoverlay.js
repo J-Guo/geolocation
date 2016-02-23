@@ -10,11 +10,11 @@ LoadingOverlay - A flexible loading overlay jQuery plugin
         color           : "rgba(255, 255, 255, 0.8)",
         custom          : "",
         fontawesome     : "",
-        image           : "images/loading.gif",
-        maxSize         : "100px",
-        minSize         : "20px",
+        image           : "images/Radar1.gif",
+        maxSize         : "400px",
+        minSize         : "400px",
         resizeInterval  : 0,
-        size            : "50%"
+        size            : "200%"
     };
 
     $.LoadingOverlaySetup = function(settings){
