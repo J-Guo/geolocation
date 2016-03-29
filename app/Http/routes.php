@@ -50,6 +50,15 @@ Route::group(['middleware' => 'web'], function () {
         Route::get('map8','HomeController@showUserMap8');
         Route::post('store-location','HomeController@storeLocation');
 
+        //Google Map search based on DB
+        Route::get('map9','HomeController@showUserMap9');
+        Route::post('affiliate-locations','HomeController@getNearbyAffiliates');
+
+        //show distance calculate page
+        Route::get('distance','HomeController@showDistanceCalculator');
+        //calculate the distance
+        Route::get('distance-calculator','HomeController@calculateDistance');
+
         Route::get('map-component', 'HomeController@showUserMapComponent');
         Route::get('vue-test', 'HomeController@showVue');
         Route::get('json', 'HomeController@showJsonPage');

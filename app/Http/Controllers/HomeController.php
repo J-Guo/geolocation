@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\models\Location;
 
@@ -54,6 +55,10 @@ class HomeController extends Controller
         return view('map8');
     }
 
+    public function showUserMap9(){
+        return view('map9');
+    }
+
     public function  showUserMapComponent(){
 
         return view('map-component');
@@ -81,6 +86,53 @@ class HomeController extends Controller
         $location->latitude = $latitude;
         $location->longitude = $longitude;
         $location->save();
+
+    }
+
+    public function showDistanceCalculator(){
+
+        return view('distance');
+    }
+
+    //calculate the distance between two points
+    public function calculateDistance(Request $request){
+
+        $fromLat = $request->input('fromLat');
+        $fromLon = $request->input('fromLon');
+
+        $toLat = $request->input('toLat');
+        $toLon = $request->input('toLon');
+
+        $theta = $fromLon  - $toLon;
+        $dist = sin(deg2rad($fromLat)) * sin(deg2rad($toLat)) +  cos(deg2rad($fromLat)) * cos(deg2rad($toLat)) * cos(deg2rad($theta));
+        $dist = acos($dist);
+        $dist = rad2deg($dist);
+        $miles = $dist * 60 * 1.1515;
+
+        //get meters
+        $meters = $miles * 1.609344 * 1000;
+
+        return $meters;
+
+    }
+
+    //get locations from DB
+    public function getNearbyAffiliates(){
+
+        /*
+         * Find the affiliate locations based on user current location
+         * and radians distance (km)
+         */
+
+        $locations =
+            DB::table('locations')
+            ->select(DB::raw('*, (6371 * acos( cos( radians(-33.876173) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(151.209859) ) + sin( radians(-33.876173) ) * sin( radians( latitude ) ) ) ) AS distance '))
+            ->having('distance', '<', 5) //radius distance (km)
+            ->orderBy('distance')
+            ->limit(25) //the the number of research results
+            ->get();
+
+        return response()->json($locations);
 
     }
 
