@@ -65,6 +65,8 @@ var app = new Vue({
             var geocoder = new google.maps.Geocoder();
             var vm = this;
 
+
+
             geocoder.geocode({address:this.address},function(results,status){
                 console.log(status,results);
 
