@@ -46,6 +46,10 @@ Route::group(['middleware' => 'web'], function () {
         Route::get('map6', 'HomeController@showUserMap6');
         //Google Map with onther Preloader
         Route::get('map7', 'HomeController@showUserMap7');
+        //Goole Map to get current location
+        Route::get('map8','HomeController@showUserMap8');
+        Route::post('store-location','HomeController@storeLocation');
+
         Route::get('map-component', 'HomeController@showUserMapComponent');
         Route::get('vue-test', 'HomeController@showVue');
         Route::get('json', 'HomeController@showJsonPage');
