@@ -117,17 +117,19 @@ class HomeController extends Controller
     }
 
     //get locations from DB
-    public function getNearbyAffiliates(){
+    public function getNearbyAffiliates(Request $request){
 
         /*
          * Find the affiliate locations based on user current location
          * and radians distance (km)
          */
+        $lat = $request->input('latitude');
+        $lng = $request->input('longitude');
 
         $locations =
             DB::table('locations')
-            ->select(DB::raw('*, (6371 * acos( cos( radians(-33.876173) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(151.209859) ) + sin( radians(-33.876173) ) * sin( radians( latitude ) ) ) ) AS distance '))
-            ->having('distance', '<', 5) //radius distance (km)
+            ->select(DB::raw("*, (6371 * acos( cos( radians($lat) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians($lng) ) + sin( radians($lat ) ) * sin( radians( latitude ) ) ) ) AS distance"))
+            ->having('distance', '<', 10) //radius distance (km)
             ->orderBy('distance')
             ->limit(25) //the the number of research results
             ->get();

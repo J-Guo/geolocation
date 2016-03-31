@@ -7,6 +7,7 @@ $(window).load(function() {
     $("#preloader").delay(400).fadeOut("slow"); // will fade out the white DIV that covers the website.
 });
 
+var markers = []; // Create a marker array to hold  markers
 
 var app = new Vue({
     el: 'body',
@@ -39,6 +40,9 @@ var app = new Vue({
 
                     });
 
+                    //put mark in array
+                    markers.push(marker);
+
                 });
             }
             //broswer does not support Geolocation
@@ -55,6 +59,8 @@ var app = new Vue({
                     map:vm.map
 
                 });
+
+                markers.push(marker);
             }
 
         },
@@ -65,7 +71,8 @@ var app = new Vue({
             var geocoder = new google.maps.Geocoder();
             var vm = this;
 
-
+            //clear all existed markers
+            setMapOnAll(null);
 
             geocoder.geocode({address:this.address},function(results,status){
                 console.log(status,results);
@@ -95,10 +102,13 @@ var app = new Vue({
                 //if the return results are avaiable, show the first one on the map
                 if(status === google.maps.GeocoderStatus.OK){
 
-                    vm.map.setZoom(15);
-                    vm.map.setCenter(results[0].geometry.location);
+                    //get the first research result
+                    var resultLocation = results[0].geometry.location;
 
-                    var locations = getNearbyAffiliate();
+                    vm.map.setZoom(15);
+                    vm.map.setCenter(resultLocation);
+
+                    var locations = getNearbyAffiliate(resultLocation.lat(),resultLocation.lng());
 
                     var iconBase = 'images/'; //maker image
                     for (i = 0; i < locations.length; i++) {
@@ -124,15 +134,21 @@ var app = new Vue({
                             }
                         })(marker, i));
 
+                        markers.push(marker);
+
                     }
 
 
                     //build a search result maker for the map
-                    return new google.maps.Marker({
+                    var marker = new google.maps.Marker({
                         map: vm.map,
-                        position: results[0].geometry.location
+                        position: resultLocation
 
-                    })
+                    });
+
+                    markers.push(marker);
+
+                    return marker
                 }
                 else{
                     alert('Oops, Had troulbe to track this address, Please try again');}
@@ -161,8 +177,15 @@ function getRandomOneTwo(){
 
 }
 
-//get affiliates locations
-function getNearbyAffiliate(){
+// Sets the map on all markers in the array.
+function setMapOnAll(map) {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+    }
+}
+
+//get affiliates locations based on user research
+function getNearbyAffiliate(lat,lng){
 
     var results = null;
 
@@ -180,6 +203,7 @@ function getNearbyAffiliate(){
         type: 'POST',
         async: false,
         dataType: 'JSON',
+        data:{latitude:lat,longitude:lng},
         success: function (data) {
           return  results =  data;
         }
