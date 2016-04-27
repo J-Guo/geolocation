@@ -54,6 +54,9 @@ Route::group(['middleware' => 'web'], function () {
         Route::get('map9','HomeController@showUserMap9');
         Route::post('affiliate-locations','HomeController@getNearbyAffiliates');
 
+        //Google Map with customize search box
+        Route::get('map10','HomeController@showUserMap10');
+
         //show distance calculate page
         Route::get('distance','HomeController@showDistanceCalculator');
         //calculate the distance

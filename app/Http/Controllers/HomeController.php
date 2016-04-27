@@ -59,6 +59,10 @@ class HomeController extends Controller
         return view('map9');
     }
 
+    public function showUserMap10(){
+        return view('map10');
+    }
+
     public function  showUserMapComponent(){
 
         return view('map-component');
