@@ -57,6 +57,11 @@ Route::group(['middleware' => 'web'], function () {
         //Google Map with customize search box
         Route::get('map10','HomeController@showUserMap10');
 
+        //Google Map with customize search box
+        Route::get('map11','HomeController@showUserMap11');
+        //Google Map Geocoding Reverse
+        Route::get('map12','HomeController@showUserMap12');
+
         //show distance calculate page
         Route::get('distance','HomeController@showDistanceCalculator');
         //calculate the distance

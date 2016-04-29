@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\models\Location;
-
+use GuzzleHttp\Client;
 use Auth;
 
 class HomeController extends Controller
@@ -61,6 +61,30 @@ class HomeController extends Controller
 
     public function showUserMap10(){
         return view('map10');
+    }
+
+    public function showUserMap11(){
+        return view('map11');
+    }
+
+    public function showUserMap12(){
+
+        // Create a client with a base URI
+        $client = new Client(['base_uri' => 'https://maps.googleapis.com/maps/api/geocode/']);
+
+        $latitude = -33.9206177;
+        $longitude = 151.1561302;
+        $googleMapAPIKey = 'AIzaSyAomTWe6-_JXMoza7hm9olIQLZ8TEq5PdY';
+        $result_type = 'route';
+
+        // Send a request to https://foo.com/api/test
+        $response = $client->request('GET', "json?latlng=$latitude,$longitude&key=$googleMapAPIKey");
+
+        $json = json_decode($response->getBody()) ;
+
+//        echo ($json->results[0]->formatted_address);
+        dd($json);
+
     }
 
     public function  showUserMapComponent(){
